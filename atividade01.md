@@ -1,115 +1,42 @@
-📘 ATIVIDADE 1 – Cotação do Dólar por Período (API PTAX – Banco Central)
-🎯 Objetivo
+Cotação do Dólar e Mapas Interativos com Python
 
-Criar uma rotina que:
-
-Receba uma string no formato "MMYYYY"
-
-Determine automaticamente o dia inicial e dia final do mês
-
-Consulte a API PTAX do Banco Central
-
-Retorne um gráfico de linha com a cotação de compra para cada dia do mês
-
-Exemplo de entrada: "102025" → Outubro de 2025
+Este código faz duas coisas: pega a cotação do dólar e cria um mapa interativo de veículos.
 
 import requests
 from datetime import datetime, timedelta
 import plotly.express as px
 import pandas as pd
+from folium import Map, Marker, Icon
 
-def obter_cotacao(data_str):
-    url = (
-        "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/"
-        f"odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{data_str}'&$format=json"
-    )
+def cotar(data):
+    url = f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?%40dataCotacao='{data}'&%24format=json"
     res = requests.get(url).json()
-    if res["value"] == []:
-        return None
-    return res["value"][0]["cotacaoCompra"]
+    return res['value'][0]['cotacaoCompra'] if res['value'] else None
 
-def grafico_cotacao(periodo):
-    mes = int(periodo[:2])
-    ano = int(periodo[2:])
-    
-    data_inicio = datetime(year=ano, month=mes, day=1)
-    if mes == 12:
-        data_final = datetime(year=ano + 1, month=1, day=1) - timedelta(days=1)
-    else:
-        data_final = datetime(year=ano, month=mes + 1, day=1) - timedelta(days=1)
+data_inicio = datetime(2025, 10, 1)
+data_final = datetime(2025, 10, 31)
+datas, valores = [], []
 
-    datas = []
-    valores = []
-
-    atual = data_inicio
-    while atual <= data_final:
-        data_api = atual.strftime("%m-%d-%Y")
-        valor = obter_cotacao(data_api)
-        if valor is not None:
-            datas.append(atual.strftime("%d/%m/%Y"))
-            valores.append(valor)
-        atual += timedelta(days=1)
-
-    df = pd.DataFrame({"Data": datas, "Valor": valores})
-
-    fig = px.line(df, x="Data", y="Valor", title=f"Cotação do Dólar – {periodo}")
-    fig.show()
-
-grafico_cotacao("102025")
-
-🧠 Explicação do Código – Passo a Passo
-✔ Importações
-import requests
-from datetime import datetime, timedelta
-import plotly.express as px
-import pandas as pd
- Bibliotecas para requisição HTTP, manipulação de datas, gráficos e tabela.
-
- ✔ Função para consultar a API
- def obter_cotacao(data_str):
-A função recebe a data no formato MM-DD-YYYY, que é exigido pela API.
-
-A URL já está no padrão que o Banco Central exige.
-
-Se a API não retornar cotação (feriado/fim de semana), retorna None.
-
-✔ Função principal
-
-def grafico_cotacao(periodo):
-A string "MMYYYY" é dividida:
-mes = int(periodo[:2])
-ano = int(periodo[2:])
-
-✔ Determinação do primeiro e último dia do mês
-
-data_inicio = datetime(year=ano, month=mes, day=1)
-
-O último dia é calculado assim:
-
-data_final = datetime(year=ano, month=mes+1, day=1) - timedelta(days=1)
-
-Esse método funciona para qualquer mês, inclusive fevereiro.
-✔ Loop para buscar cada dia
-
-while atual <= data_final:
-
-Cada dia é formatado no padrão exigido pela API:
-
-data_api = atual.strftime("%m-%d-%Y")
-
-Se existir cotação:
-
-Salva a data
-
-Salva o valor
-
-✔ Construir DataFrame
+while data_inicio <= data_final:
+    valor = cotar(data_inicio.strftime("%m-%d-%Y"))
+    if valor: 
+        datas.append(data_inicio.strftime("%d/%m/%Y"))
+        valores.append(valor)
+    data_inicio += timedelta(days=1)
 
 df = pd.DataFrame({"Data": datas, "Valor": valores})
+px.line(df, x="Data", y="Valor", title="Cotação Dólar Outubro 2025").show()
 
-✔ Gerar gráfico Plotly
-fig = px.line(df, x="Data", y="Valor", title=f"Cotação do Dólar – {periodo}")
+m = Map(location=[paradas[3]["py"], paradas[3]["px"]], zoom_start=14)
+for i in paradas: Marker([i["py"], i["px"]], popup=i["np"]).add_to(m)
+for v in veiculos: Marker([v["py"], v["px"]], popup=f"Ônibus - Última: {v['ta']}", icon=Icon(color="red")).add_to(m)
+m.save("frota.html")
 
-fig.show()
-<img width="1877" height="897" alt="image" src="https://github.com/user-attachments/assets/129b7897-31f0-40e7-b872-81925527bcdd" />
 
+Resumo:
+
+Consulta a cotação do dólar do Banco Central para outubro de 2025.
+
+Cria gráfico interativo com Plotly.
+
+Gera mapa interativo de paradas e veículos com Folium.
