@@ -1,6 +1,5 @@
 
 definição f(números, alvo):
-    
     vistos = {}  
     
     for i, num in enumerate(nums):
