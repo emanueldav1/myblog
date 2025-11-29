@@ -1,4 +1,4 @@
-def f(nums, alvo):
+definição f(números, alvo):
     
     vistos = {}  
     
