@@ -1,6 +1,7 @@
 
-  definição f(números, alvo):
-
+[problem_01 (1).py](https://github.com/user-attachments/files/23834714/problem_01.1.py)
+def f(nums, alvo):
+    
     vistos = {}  
     
     for i, num in enumerate(nums):
@@ -13,3 +14,4 @@
         
         
         vistos[num] = i
+
