@@ -40,3 +40,5 @@ Consulta a cotação do dólar do Banco Central para outubro de 2025.
 Cria gráfico interativo com Plotly.
 
 Gera mapa interativo de paradas e veículos com Folium.
+<img width="1600" height="753" alt="image" src="https://github.com/user-attachments/assets/befc973e-7256-4124-a443-79364ca43997" />
+
