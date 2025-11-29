@@ -1,3 +1,4 @@
+
 definição f(números, alvo):
     
     vistos = {}  
