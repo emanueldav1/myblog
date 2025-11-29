@@ -81,4 +81,6 @@ Plota gráficos interativos usando Plotly.
 Lê e escreve arquivos de texto de várias formas.
 
 Salva e lê objetos Python complexos com Pickle.
+<img width="1600" height="763" alt="image" src="https://github.com/user-attachments/assets/ec59d282-7343-4d57-8955-505b5aac77ee" />
+
 
