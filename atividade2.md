@@ -34,3 +34,5 @@ Cria um mapa com Folium mostrando todas as paradas.
 Adiciona a posição dos ônibus em tempo real.
 
 Abre o mapa no navegador para visualização interativa.
+<img width="1600" height="779" alt="image" src="https://github.com/user-attachments/assets/5a6ea7ba-e065-4774-b239-3ee53ab1c44c" />
+
